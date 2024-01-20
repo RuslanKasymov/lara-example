@@ -1,0 +1,103 @@
+version: '3.3'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    user: "${UID}:${GID}"
+    volumes:
+      - ./:/app
+      - ./docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+    ports:
+      - 6001:6001
+      - 6002:6002
+      - 8080:8080
+    environment:
+      - COMPOSER_MEMORY_LIMIT=-1
+      - PHP_IDE_CONFIG=serverName=Docker
+      - XDEBUG_SESSION=1
+      - APP_ENV=local
+      - APP_BASE_PATH=/app
+      - LARAVEL_OCTANE=1
+      - LARAVEL_PARALLEL_TESTING=1
+      - LOG_CHANNEL=stderr
+      - MAIL_DRIVER=smtp
+      - MAIL_HOST=mailcatcher
+      - MAIL_PORT=1025
+    command: php artisan octane:start --server=roadrunner --host=0.0.0.0 --rpc-port=6001 --port=8080 --watch --workers=1 # local
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+      - mailcatcher
+
+  app-queue:
+    build:
+      context: .
+      dockerfile: docker/php-cli/Dockerfile
+    user: "${UID}:${GID}"
+    volumes:
+      - ./:/app
+      - ./docker/php-cli/php.ini:/usr/local/etc/php/php.ini
+    depends_on:
+      - postgres
+      - rabbitmq
+    restart: always
+    command: php artisan queue:listen --tries=1
+
+  postgres:
+    image: postgis/postgis:15-3.4
+    restart: always
+    shm_size: '1gb'
+    environment:
+      POSTGRES_PASSWORD: test
+      POSTGRES_USER: test
+      POSTGRES_DB: example
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+
+  redis:
+    image: redis:5.0.6
+    volumes:
+      - redis-data:/bitnami/redis/data
+    ports:
+      - 6379:6379
+
+  rabbitmq:
+    image: rabbitmq:3.8-management-alpine
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+    ports:
+      - 5672:5672
+      - 15672:15672
+
+  elasticsearch:
+    image: docker.io/bitnami/elasticsearch:7
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - elasticsearch-data:/bitnami/elasticsearch/data
+
+  mailcatcher:
+    image: sj26/mailcatcher:v0.8.2
+    ports:
+      - 1080:1080
+      - 1025:1025
+
+volumes:
+  db-data:
+  redis-data:
+  rabbitmq-data:
+  elasticsearch-data:
+  data01:
+    driver: local
+  data02:
+    driver: local
+  data03:
+    driver: local
