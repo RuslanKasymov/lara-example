@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Articles\Article\Presentation\ArticleController;
 use App\Domain\Users\User\Presentation\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,3 +16,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/users/{id}', [UserController::class, 'getUser']);
+
+Route::group(['prefix' => 'articles'], function () {
+    Route::post('/', [ArticleController::class, 'create']);
+    Route::get('/', [ArticleController::class, 'list']);
+    Route::put('/{id}', [ArticleController::class, 'update']);
+    Route::get('/{id}', [ArticleController::class, 'get']);
+    Route::delete('/{id}', [ArticleController::class, 'delete']);
+});
+
+

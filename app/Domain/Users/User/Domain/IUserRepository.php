@@ -2,7 +2,7 @@
 
 namespace App\Domain\Users\User\Domain;
 
-use App\Domain\Users\User\Domain\Model\User;
+use App\Domain\Users\User\Domain\Models\User;
 
 interface IUserRepository
 {

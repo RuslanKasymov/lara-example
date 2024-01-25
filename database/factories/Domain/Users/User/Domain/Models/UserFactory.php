@@ -1,8 +1,8 @@
 <?php
 
-namespace Database\Factories\Domain\Users\User\Domain\Model;
+namespace Database\Factories\Domain\Users\User\Domain\Models;
 
-use App\Domain\Users\User\Domain\Model\User;
+use App\Domain\Users\User\Domain\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;

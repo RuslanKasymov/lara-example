@@ -1,5 +1,6 @@
 <?php
 
+use App\Domain\Articles\Article\ArticleServiceProvider;
 use App\Domain\Users\User\UserServiceProvider;
 use App\Providers\AppServiceProvider;
 use App\Providers\AuthServiceProvider;
@@ -163,6 +164,7 @@ return [
     'providers' => ServiceProvider::defaultProviders()->merge([
         AppServiceProvider::class,
         AuthServiceProvider::class,
+        ArticleServiceProvider::class,
         EventServiceProvider::class,
         RouteServiceProvider::class,
         UserServiceProvider::class,
