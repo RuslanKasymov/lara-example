@@ -13,6 +13,7 @@ use App\Domain\Articles\Article\Presentation\Requests\UpdateArticleRequest;
 use App\Domain\SharedKernel\Users\IUserService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
+use OpenApi\Annotations as OA;
 use Symfony\Component\HttpFoundation\Response;
 
 class ArticleController extends BaseController
@@ -31,14 +32,14 @@ class ArticleController extends BaseController
      *         @OA\Schema(type="string")
      *      ),
      *      @OA\RequestBody(
-     *        @OA\JsonContent(ref="#/components/schemas/AddArticleRequest")
+     *        @OA\JsonContent(ref="#/components/schemas/CreateArticleRequest")
      *      ),
      *      @OA\Response(
      *          response=200,
      *          description="Success",
      *          @OA\JsonContent(
      *             type="object",
-     *             @OA\Property(property="data", ref="#/components/schemas/ArticleDTO")
+     *             @OA\Property(property="data", ref="#/components/schemas/ArticleOutputDTO")
      *          )
      *      ),
      *      @OA\Response(

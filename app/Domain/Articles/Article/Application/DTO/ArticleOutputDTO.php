@@ -3,7 +3,18 @@
 namespace App\Domain\Articles\Article\Application\DTO;
 
 use App\Domain\Articles\Article\Domain\Models\Article;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *   schema="ArticleOutputDTO",
+ *   type="object",
+ *   @OA\Property(property="id", type="integer"),
+ *   @OA\Property(property="name", type="string"),
+ *   @OA\Property(property="text", type="string"),
+ *   @OA\Property(property="status", ref="#/components/schemas/ArticleStatus"),
+ * )
+ */
 class ArticleOutputDTO
 {
     public int $id;

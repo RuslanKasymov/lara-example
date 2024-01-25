@@ -7,7 +7,17 @@ use App\Domain\SharedKernel\Articles\Enums\ArticleStatus;
 use App\Domain\SharedKernel\Users\Contracts\IUser;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
+use OpenApi\Annotations as OA;
 
+/**
+ * @OA\Schema(
+ *   schema="CreateArticleRequest",
+ *   type="object",
+ *   @OA\Property(property="name", type="string", maxLength=255),
+ *   @OA\Property(property="text", type="string", maxLength=2000),
+ *   @OA\Property(property="status", ref="#/components/schemas/ArticleStatus")
+ * )
+ */
 class CreateArticleRequest extends FormRequest
 {
     public function rules(): array

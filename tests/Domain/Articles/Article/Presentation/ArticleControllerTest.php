@@ -20,7 +20,7 @@ class ArticleControllerTest extends TestCase
     {
         $user = User::factory()->create();
 
-        $response = $this->actingAs($user)->postJson('/api/articles/', [
+        $response = $this->actingAs($user)->postJson('/api/v1/articles/', [
             'name' => 'Article name',
             'text' => 'Some article text',
             'status' => ArticleStatus::PUBLISHED->value,
@@ -43,6 +43,25 @@ class ArticleControllerTest extends TestCase
     }
 
     /**
+     * @covers ::create
+     */
+    public function testCreateArticleUnauthorized(): void
+    {
+        $response = $this->postJson('/api/v1/articles/', [
+            'name' => 'Article name',
+            'text' => 'Some article text',
+            'status' => ArticleStatus::PUBLISHED->value,
+        ]);
+
+        $response->assertStatus(Response::HTTP_UNAUTHORIZED);
+
+        $this->assertDatabaseMissing('articles', [
+            'name' => 'Article name',
+            'text' => 'Some article text',
+        ]);
+    }
+
+    /**
      * @covers ::update
      */
     public function testUpdateArticle(): void
@@ -50,7 +69,7 @@ class ArticleControllerTest extends TestCase
         $user = User::factory()->create();
         $article = Article::factory()->create(['user_id' => $user->id,'status' => ArticleStatus::PENDING]);
 
-        $response = $this->actingAs($user)->putJson('/api/articles/'.$article->id, [
+        $response = $this->actingAs($user)->putJson('/api/v1/articles/'.$article->id, [
             'name' => 'Article name',
             'text' => 'Some article text',
             'status' => ArticleStatus::PUBLISHED->value,
@@ -81,7 +100,7 @@ class ArticleControllerTest extends TestCase
         $user = User::factory()->create();
         $article = Article::factory()->create(['status' => ArticleStatus::PENDING]);
 
-        $response = $this->actingAs($user)->deleteJson('/api/articles/'.$article->id);
+        $response = $this->actingAs($user)->deleteJson('/api/v1/articles/'.$article->id);
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
 
@@ -95,7 +114,7 @@ class ArticleControllerTest extends TestCase
     {
         $article = Article::factory()->create();
 
-        $response = $this->getJson('/api/articles/'.$article->id);
+        $response = $this->getJson('/api/v1/articles/'.$article->id);
 
         $response->assertStatus(Response::HTTP_OK)
             ->assertJson([
@@ -116,7 +135,7 @@ class ArticleControllerTest extends TestCase
         $articleTwo = Article::factory()->create();
         $articleThree = Article::factory()->create();
 
-        $response = $this->actingAs($user)->getJson('/api/articles');
+        $response = $this->actingAs($user)->getJson('/api/v1/articles');
 
         $response->assertStatus(Response::HTTP_OK)
             ->assertJson([

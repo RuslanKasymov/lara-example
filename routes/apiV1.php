@@ -15,10 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// TODO: Add auth routes: login (with 'login' name is required), refresh token, logout, reset-password
+
 Route::get('/users/{id}', [UserController::class, 'getUser']);
 
 Route::group(['prefix' => 'articles'], function () {
-    Route::post('/', [ArticleController::class, 'create']);
+    Route::post('/', [ArticleController::class, 'create'])->middleware('auth');
     Route::get('/', [ArticleController::class, 'list']);
     Route::put('/{id}', [ArticleController::class, 'update']);
     Route::get('/{id}', [ArticleController::class, 'get']);
