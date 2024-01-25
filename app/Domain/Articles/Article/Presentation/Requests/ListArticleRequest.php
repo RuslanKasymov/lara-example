@@ -14,6 +14,7 @@ class ListArticleRequest extends FormRequest
             'limit' => ['integer', 'nullable', 'min:1', 'max:20']
         ];
     }
+
     public function toDTO(): ArticlePaginationDTO
     {
         return new ArticlePaginationDTO(

@@ -130,14 +130,12 @@ class ArticleControllerTest extends TestCase
      */
     public function testListArticles(): void
     {
-        $user = User::factory()->create();
         $articleOne = Article::factory()->create();
         $articleTwo = Article::factory()->create();
         $articleThree = Article::factory()->create();
 
-        $response = $this->actingAs($user)->getJson('/api/v1/articles');
-
-        $response->assertStatus(Response::HTTP_OK)
+        $this->getJson('/api/v1/articles')
+            ->assertStatus(Response::HTTP_OK)
             ->assertJson([
                 [
                     'id' => $articleThree->id,
@@ -149,5 +147,15 @@ class ArticleControllerTest extends TestCase
                     'id' => $articleOne->id,
                 ]
             ]);
+
+        // Test pagination and limit
+        $this->getJson('/api/v1/articles?pagination_id=' . $articleThree->id . '&limit=1')
+            ->assertStatus(Response::HTTP_OK)
+            ->assertJson([
+                [
+                    'id' => $articleTwo->id,
+                ]
+            ])
+            ->assertJsonCount(1);
     }
 }
