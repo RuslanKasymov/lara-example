@@ -2,7 +2,7 @@
 
 namespace App\Domain\SharedKernel\Articles\Enums;
 
-use App\Domain\SharedKernel\Utils\Enum\EnumUtils;
+use App\Domain\SharedKernel\Utils\Enums\EnumUtils;
 use OpenApi\Annotations as OA;
 
 /**

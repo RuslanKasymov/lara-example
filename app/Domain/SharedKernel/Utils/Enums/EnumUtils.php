@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Domain\SharedKernel\Utils\Enum;
+namespace App\Domain\SharedKernel\Utils\Enums;
 
 trait EnumUtils
 {

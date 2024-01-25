@@ -13,8 +13,6 @@ class GetUserUseCase
 
     public function execute(int $userId): UserOutputDTO
     {
-
-
-        return UserOutputDTO::fromUser($this->userRepository->getById($userId));
+        return UserOutputDTO::fromUser($this->userRepository->getByIds([$userId])->first());
     }
 }
